@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Men's Salon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1>💈 D'Vine Salon</h1>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#booking">Book Now</a>
+      <a href="https://wa.me/919876543210" target="_blank">WhatsApp</a>
+    </nav>
+  </header>
+
+  <!-- Services Section -->
+  <section id="services">
+    <h2>Our Services</h2>
+    <ul>
+      <li>Haircut – ₹80</li>
+      <li>Beard Trim – ₹50</li>
+      <li>Hair Spa – ₹200</li>
+      <li>Facial – ₹150</li>
+    </ul>
+  </section>
+
+  <!-- Special Offer -->
+  <section id="offer">
+    <h2>🎉 Special Offer</h2>
+    <p>Haircut + Beard Trim only ₹120 (Save ₹10!)</p>
+    <a href="https://wa.me/919876543210?text=I%20want%20to%20book%20an%20appointment" target="_blank" class="whatsapp-button">
+      Book via WhatsApp
+    </a>
+  </section>
+
+  <!-- Booking Section -->
+  <section id="booking">
+    <h2>Book Your Appointment</h2>
+    <form id="bookingForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+      <label for="service">Select Service:</label>
+      <select id="service" name="service" required>
+        <option value="">--Select a Service--</option>
+        <option value="Haircut">Haircut – ₹80</option>
+        <option value="Beard Trim">Beard Trim – ₹50</option>
+        <option value="Hair Spa">Hair Spa – ₹200</option>
+        <option value="Facial">Facial – ₹150</option>
+      </select>
+
+      <label for="date">Select Date:</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="time">Select Time:</label>
+      <input type="time" id="time" name="time" required>
+
+      <button type="submit">Book Now</button>
+    </form>
+    <p id="responseMessage"></p>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer>
+    <h2>Contact Us</h2>
+    <p>📍 123 Main Street, Your City, India</p>
+    <p>📞 +91 98765 43210</p>
+    <p>© 2025 D'Vine Salon. All rights reserved.</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzpcNCvhCgJkAq7rcY7LyPDCnQ-iGwHBRGpsDJiUBy0CZrt2Ut6x6sEalDu552PQJla/exec";
+
+    document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      const responseMessage = document.getElementById("responseMessage");
+
+      // Simple validation
+      if (!data.name || !data.service || !data.date || !data.time) {
+        responseMessage.textContent = "⚠️ Please fill all fields.";
+        responseMessage.style.color = "red";
+        return;
+      }
+
+      try {
+        // Attempt POST first
+        let response = await fetch(API_URL, {
+          method: "POST",
+          body: new URLSearchParams(data),
+        });
+
+        // If POST fails, fallback to GET
+        if (!response.ok) {
+          const params = new URLSearchParams(data).toString();
+          response = await fetch(`${API_URL}?${params}`, { method: "GET" });
+        }
+
+        if (response.ok) {
+          responseMessage.textContent = "✅ Booking successful! We’ll contact you soon.";
+          responseMessage.style.color = "green";
+          this.reset();
+        } else {
+          throw new Error("Server rejected the request");
+        }
+      } catch (error) {
+        console.error(error);
+        responseMessage.textContent = "⚠️ Booking failed! Please try again later.";
+        responseMessage.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>
