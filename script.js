@@ -7,7 +7,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const responseMessage = document.getElementById("responseMessage");
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbzpcNCvhCgJkAq7rcY7LyPDCnQ-iGwHBRGpsDJiUBy0CZrt2Ut6x6sEalDu552PQJla/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxZbjVrjMiRCp88G7gBct7Lt3euHWkBo8rDsnbYQN2tI-SBgZhBV9eILHuGblawlNsS/exec", {
       method: "POST",
       body: new URLSearchParams(data),
     });
